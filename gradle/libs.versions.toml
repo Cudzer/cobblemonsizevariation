@@ -1,0 +1,21 @@
+[versions]
+# Kotlin
+kotlin = "2.0.0"
+
+fabric-kotlin = "1.11.0+kotlin.2.0.0"
+fabric-permissions-api = "0.2-SNAPSHOT"
+
+[libraries]
+kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+
+
+fabric-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", version.ref = "fabric-kotlin" }
+fabric-permissions = { group = "me.lucko", name = "fabric-permissions-api", version.ref = "fabric-permissions-api" }
+
+
+[bundles]
+
+kotlin = [ "kotlin-stdlib", "kotlin-reflect" ]
+fabric = [ "fabric-kotlin", "fabric-permissions" ]

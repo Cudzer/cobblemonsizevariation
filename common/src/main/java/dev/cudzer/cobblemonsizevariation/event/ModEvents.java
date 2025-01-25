@@ -1,0 +1,53 @@
+package dev.cudzer.cobblemonsizevariation.event;
+
+import com.cobblemon.mod.common.api.Priority;
+import com.cobblemon.mod.common.api.events.CobblemonEvents;
+import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
+import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.pokemon.Pokemon;
+import dev.cudzer.cobblemonsizevariation.Config;
+import dev.cudzer.cobblemonsizevariation.config.CobblemonSizeVariationConfig;
+import kotlin.Unit;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+
+import java.util.Random;
+
+public class ModEvents {
+    private static final Random random = new Random();
+
+    public static void registerEvents(){
+        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, ModEvents::onCobblemonSpawn);
+        CobblemonEvents.SHOULDER_MOUNT.subscribe(Priority.NORMAL, ModEvents::onShoulderMount);
+    }
+
+    private static Unit onCobblemonSpawn(SpawnEvent<PokemonEntity> event){
+        if(canModifySize()){
+            PokemonEntity entityToSpawn = event.getEntity();
+            Pokemon p = entityToSpawn.getPokemon();
+            p.setScaleModifier(generateScaleModifier());
+        }
+        return Unit.INSTANCE;
+    }
+
+    private static Unit onShoulderMount(ShoulderMountEvent event){
+        Pokemon p = event.getPokemon();
+        if(p.getScaleModifier() > CobblemonSizeVariationConfig.preventShoulderMountSize){
+            MutableComponent tooHeavyMessage = Component.literal("This Cobblemon is too chonky to sit on your shoulder!");
+            event.getPlayer().sendSystemMessage(tooHeavyMessage);
+            event.cancel();
+        }
+        return Unit.INSTANCE;
+    }
+
+    private static float generateScaleModifier(){
+        return random.nextFloat() * (
+                CobblemonSizeVariationConfig.maxSizeMultiplier - CobblemonSizeVariationConfig.minSizeMultiplier)
+                + CobblemonSizeVariationConfig.minSizeMultiplier;
+    }
+
+    private static boolean canModifySize(){
+        return random.nextFloat() < CobblemonSizeVariationConfig.sizeModificationChance;
+    }
+}

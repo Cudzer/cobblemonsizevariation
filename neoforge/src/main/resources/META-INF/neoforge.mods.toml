@@ -1,0 +1,38 @@
+modLoader = "kotlinforforge"
+loaderVersion = "[5.3,)"
+#issueTrackerURL = ""
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "cobblemonsizevariation"
+version = "${version}"
+displayName = "CobblemonSizeVariation"
+authors = "Cudzer"
+description = '''
+A mod that makes cobblemon spawn in different sizes
+'''
+#logoFile = ""
+
+[[dependencies.cobblemonsizevariation]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemonsizevariation]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cobblemonsizevariation]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "cobblemonsizevariation.mixins.json"
