@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent;
+import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import dev.cudzer.cobblemonsizevariation.Config;
@@ -20,6 +21,7 @@ public class ModEvents {
     public static void registerEvents(){
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, ModEvents::onCobblemonSpawn);
         CobblemonEvents.SHOULDER_MOUNT.subscribe(Priority.NORMAL, ModEvents::onShoulderMount);
+        CobblemonEvents.STARTER_CHOSEN.subscribe(Priority.NORMAL, ModEvents::onStarterChosen);
     }
 
     private static Unit onCobblemonSpawn(SpawnEvent<PokemonEntity> event){
@@ -37,6 +39,14 @@ public class ModEvents {
             MutableComponent tooHeavyMessage = Component.literal("This Cobblemon is too chonky to sit on your shoulder!");
             event.getPlayer().sendSystemMessage(tooHeavyMessage);
             event.cancel();
+        }
+        return Unit.INSTANCE;
+    }
+
+    private static Unit onStarterChosen(StarterChosenEvent event){
+        if(canModifySize()){
+            Pokemon starter = event.getPokemon();
+            starter.setScaleModifier(generateScaleModifier());
         }
         return Unit.INSTANCE;
     }
