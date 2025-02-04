@@ -9,6 +9,8 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.loader.api.FabricLoader;
 
+import java.nio.file.Path;
+
 import static dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation.MOD_ID;
 
 public final class CobblemonSizeVariationFabric implements ModInitializer, Platform {
@@ -19,10 +21,14 @@ public final class CobblemonSizeVariationFabric implements ModInitializer, Platf
         // Proceed with mild caution.
 
         // Run our common setup.
-        CobblemonSizeVariation.init(FabricLoader.getInstance().getConfigDir().resolve(MOD_ID).resolve(MOD_ID + ".config"), true, this);
+        CobblemonSizeVariation.init(this);
     }
 
     public boolean isModInstalled(String modId){
         return FabricLoader.getInstance().isModLoaded(modId);
+    }
+
+    public Path getConfigDirectory(){
+        return FabricLoader.getInstance().getConfigDir();
     }
 }

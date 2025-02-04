@@ -6,16 +6,11 @@ import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent;
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.platform.events.PlatformEvents;
-import com.cobblemon.mod.common.platform.events.ServerPlayerEvent;
 import com.cobblemon.mod.common.pokemon.Pokemon;
-import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
-import dev.cudzer.cobblemonsizevariation.Config;
-import dev.cudzer.cobblemonsizevariation.config.CobblemonSizeVariationConfig;
+import dev.cudzer.cobblemonsizevariation.config.ModConfig;
 import kotlin.Unit;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.MinecraftServer;
 
 import java.util.Random;
 
@@ -39,7 +34,7 @@ public class ModEvents {
 
     private static Unit onShoulderMount(ShoulderMountEvent event){
         Pokemon p = event.getPokemon();
-        if(p.getScaleModifier() > CobblemonSizeVariationConfig.preventShoulderMountSize){
+        if(p.getScaleModifier() > ModConfig.preventShoulderMountSize){
             MutableComponent tooHeavyMessage = Component.literal("This Cobblemon is too chonky to sit on your shoulder!");
             event.getPlayer().sendSystemMessage(tooHeavyMessage);
             event.cancel();
@@ -57,11 +52,11 @@ public class ModEvents {
 
     private static float generateScaleModifier(){
         return random.nextFloat() * (
-                CobblemonSizeVariationConfig.maxSizeMultiplier - CobblemonSizeVariationConfig.minSizeMultiplier)
-                + CobblemonSizeVariationConfig.minSizeMultiplier;
+                ModConfig.maxSizeMultiplier - ModConfig.minSizeMultiplier)
+                + ModConfig.minSizeMultiplier;
     }
 
     private static boolean canModifySize(){
-        return random.nextFloat() < CobblemonSizeVariationConfig.sizeModificationChance;
+        return random.nextFloat() < ModConfig.sizeModificationChance;
     }
 }

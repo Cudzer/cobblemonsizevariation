@@ -1,14 +1,10 @@
 package dev.cudzer.cobblemonsizevariation.mixin.client;
 
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants;
 import com.cobblemon.mod.common.client.gui.summary.Summary;
 import com.cobblemon.mod.common.pokemon.Pokemon;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.cudzer.cobblemonsizevariation.utils.PokemonUtils;
 import net.minecraft.client.gui.GuiGraphics;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
