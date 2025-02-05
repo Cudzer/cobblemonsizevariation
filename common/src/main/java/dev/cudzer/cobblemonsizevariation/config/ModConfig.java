@@ -141,7 +141,7 @@ public class ModConfig {
         largeDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "Large");
         largeDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, 1.61F);
         largeDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, 1.9F);
-        largeDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#fa892d");
+        largeDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#f07426");
         sizeDefinitions.add(largeDefinition);
 
         JsonObject hugeDefinition = new JsonObject();

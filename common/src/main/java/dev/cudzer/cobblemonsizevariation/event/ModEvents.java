@@ -3,6 +3,7 @@ package dev.cudzer.cobblemonsizevariation.event;
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
+import com.cobblemon.mod.common.api.events.pokemon.FossilRevivedEvent;
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent;
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
@@ -21,6 +22,7 @@ public class ModEvents {
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, ModEvents::onCobblemonSpawn);
         CobblemonEvents.SHOULDER_MOUNT.subscribe(Priority.NORMAL, ModEvents::onShoulderMount);
         CobblemonEvents.STARTER_CHOSEN.subscribe(Priority.NORMAL, ModEvents::onStarterChosen);
+        CobblemonEvents.FOSSIL_REVIVED.subscribe(Priority.NORMAL, ModEvents::onFossilRevived);
     }
 
     private static Unit onCobblemonSpawn(SpawnEvent<PokemonEntity> event){
@@ -46,6 +48,14 @@ public class ModEvents {
         if(canModifySize()){
             Pokemon starter = event.getPokemon();
             starter.setScaleModifier(generateScaleModifier());
+        }
+        return Unit.INSTANCE;
+    }
+
+    private static Unit onFossilRevived(FossilRevivedEvent event){
+        if(canModifySize()){
+            Pokemon pokemon = event.getPokemon();
+            pokemon.setScaleModifier(generateScaleModifier());
         }
         return Unit.INSTANCE;
     }

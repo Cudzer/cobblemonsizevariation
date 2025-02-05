@@ -1,7 +1,10 @@
 package dev.cudzer.cobblemonsizevariation;
 
+import com.mojang.brigadier.CommandDispatcher;
+import dev.cudzer.cobblemonsizevariation.command.ChangeSizeCommand;
 import dev.cudzer.cobblemonsizevariation.config.ModConfig;
 import dev.cudzer.cobblemonsizevariation.event.ModEvents;
+import net.minecraft.commands.CommandSourceStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,5 +23,9 @@ public final class CobblemonSizeVariation {
 
         ModConfig.init(platform.getConfigDirectory());
         ModEvents.registerEvents();
+    }
+
+    public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher){
+        ChangeSizeCommand.registerCommand(dispatcher);
     }
 }

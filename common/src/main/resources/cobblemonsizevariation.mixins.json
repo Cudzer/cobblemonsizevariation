@@ -8,6 +8,7 @@
     "client.SummaryMixin"
   ],
   "mixins": [
+    "CobblemonNetworkMixin"
   ],
   "injectors": {
     "defaultRequire": 1
