@@ -12,4 +12,9 @@ public class ConfigKey {
     public static final String SIZE_DEFINITION_MIN = "min";
     public static final String SIZE_DEFINITION_MAX = "max";
     public static final String SIZE_DEFINITION_COLOR = "color";
+
+    //PERMISSION KEYS
+    public static final String PERMISSIONS = "permissions";
+    public static final String POKESIZER_PERM_NAME = "cobblemonsizevariation.command.pokesizer";
+    public static final String POKESIZER_SELF_PERM_NAME = "cobblemonsizevariation.command.pokesizer.self";
 }

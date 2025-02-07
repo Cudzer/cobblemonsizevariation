@@ -8,11 +8,14 @@ import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent;
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
+import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import dev.cudzer.cobblemonsizevariation.config.ModConfig;
+import dev.cudzer.cobblemonsizevariation.network.SizeChangedPacket;
 import kotlin.Unit;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class ModEvents {
@@ -55,7 +58,9 @@ public class ModEvents {
     private static Unit onFossilRevived(FossilRevivedEvent event){
         if(canModifySize()){
             Pokemon pokemon = event.getPokemon();
-            pokemon.setScaleModifier(generateScaleModifier());
+            var sizeModifier = generateScaleModifier();
+            pokemon.setScaleModifier(sizeModifier);
+            CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(Objects.requireNonNull(event.getPlayer()), new SizeChangedPacket(() -> pokemon, (double)sizeModifier));
         }
         return Unit.INSTANCE;
     }

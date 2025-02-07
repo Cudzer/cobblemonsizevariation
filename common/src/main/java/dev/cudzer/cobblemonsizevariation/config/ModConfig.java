@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ModConfig {
@@ -24,6 +25,9 @@ public class ModConfig {
 
     private static JsonArray sizeDefinitionConfig;
     public static List<SizeDefinition> sizeDefinitions = new ArrayList<>();
+
+    private static JsonArray permissionConfig;
+    public static HashMap<String, Integer> perms = new HashMap<>();
 
     private static Path fullPath;
 
@@ -59,6 +63,8 @@ public class ModConfig {
         defaultConfig.addProperty(ConfigKey.MINIMUM_SIZE_MULTIPLIER, 0.2F);
         defaultConfig.addProperty(ConfigKey.MAXIMUM_SIZE_MULTIPLIER, 2.0F);
 
+        defaultConfig.add(ConfigKey.PERMISSIONS, generateDefaultPermissions());
+
         defaultConfig.add(ConfigKey.SIZE_DEFINITIONS, generateDefaultSizeDefinitions());
     }
 
@@ -86,15 +92,33 @@ public class ModConfig {
         minSizeMultiplier = finalConfiguration.get(ConfigKey.MINIMUM_SIZE_MULTIPLIER).getAsFloat();
         maxSizeMultiplier = finalConfiguration.get(ConfigKey.MAXIMUM_SIZE_MULTIPLIER).getAsFloat();
         sizeDefinitionConfig = finalConfiguration.get(ConfigKey.SIZE_DEFINITIONS).getAsJsonArray();
+        permissionConfig = finalConfiguration.get(ConfigKey.PERMISSIONS).getAsJsonArray();
 
         sizeDefinitions.clear();
         sizeDefinitionConfig.iterator().forEachRemaining(
                 (element) -> sizeDefinitions.add(parseSizeDefinitionElement(element.getAsJsonObject()))
         );
+
+        perms.clear();
+        permissionConfig.iterator().forEachRemaining(
+                (element) -> {
+                    JsonObject permObj = element.getAsJsonObject();
+                    if(permObj.has(ConfigKey.POKESIZER_PERM_NAME)){
+                        perms.put(ConfigKey.POKESIZER_PERM_NAME, permObj.get(ConfigKey.POKESIZER_PERM_NAME).getAsInt());
+                    }
+                    if(permObj.has(ConfigKey.POKESIZER_SELF_PERM_NAME)){
+                        perms.put(ConfigKey.POKESIZER_SELF_PERM_NAME, permObj.get(ConfigKey.POKESIZER_SELF_PERM_NAME).getAsInt());
+                    }
+                }
+        );
     }
 
     public static SizeDefinition getSizeDefinition(float size){
         return sizeDefinitions.stream().filter(s -> s.isInRange(size)).findFirst().orElse(null);
+    }
+
+    public static int getPermission(String permKey){
+        return perms.get(permKey);
     }
 
     private static SizeDefinition parseSizeDefinitionElement(JsonObject sizeDefinitionElement){
@@ -104,6 +128,20 @@ public class ModConfig {
         String color = sizeDefinitionElement.get(ConfigKey.SIZE_DEFINITION_COLOR).getAsString();
 
         return new SizeDefinition(name, min, max, color);
+    }
+
+    private static JsonArray generateDefaultPermissions(){
+        JsonArray perms = new JsonArray();
+
+        JsonObject pokesizerPerm = new JsonObject();
+        pokesizerPerm.addProperty(ConfigKey.POKESIZER_PERM_NAME, 2);
+        perms.add(pokesizerPerm);
+
+        JsonObject pokesizerSelfPerm = new JsonObject();
+        pokesizerSelfPerm.addProperty(ConfigKey.POKESIZER_SELF_PERM_NAME, 2);
+        perms.add(pokesizerSelfPerm);
+
+        return perms;
     }
 
     private static JsonArray generateDefaultSizeDefinitions(){

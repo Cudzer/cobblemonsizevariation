@@ -1,6 +1,6 @@
 package dev.cudzer.cobblemonsizevariation.network;
 
-import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket;
+import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.SingleUpdatePacket;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
@@ -37,8 +37,14 @@ public class SizeChangedPacket extends SingleUpdatePacket<Double, SizeChangedPac
     }
 
     public static SizeChangedPacket decode(RegistryFriendlyByteBuf buffer){
-        var pokemon = PokemonUpdatePacket.Companion.decodePokemon(buffer);
+        var pokemon = decodePokemon(buffer);
         double newSize = buffer.readDouble();
         return new SizeChangedPacket(pokemon, newSize);
+    }
+
+    private static Function0<Pokemon> decodePokemon(RegistryFriendlyByteBuf buffer){
+        var store = buffer.readUUID();
+        var pokemonId = buffer.readUUID();
+        return () -> CobblemonClient.INSTANCE.getStorage().locatePokemon(store, pokemonId);
     }
 }
