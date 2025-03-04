@@ -32,7 +32,7 @@ public class ModEvents {
         if(canModifySize()){
             PokemonEntity entityToSpawn = event.getEntity();
             Pokemon p = entityToSpawn.getPokemon();
-            p.setScaleModifier(generateScaleModifier());
+            p.setScaleModifier(CobblemonSizeVariation.SIZER.getSize());
         }
         return Unit.INSTANCE;
     }
@@ -50,7 +50,7 @@ public class ModEvents {
     private static Unit onStarterChosen(StarterChosenEvent event){
         if(canModifySize()){
             Pokemon starter = event.getPokemon();
-            starter.setScaleModifier(generateScaleModifier());
+            starter.setScaleModifier(CobblemonSizeVariation.SIZER.getSize());
         }
         return Unit.INSTANCE;
     }
@@ -58,17 +58,11 @@ public class ModEvents {
     private static Unit onFossilRevived(FossilRevivedEvent event){
         if(canModifySize()){
             Pokemon pokemon = event.getPokemon();
-            var sizeModifier = generateScaleModifier();
+            var sizeModifier = CobblemonSizeVariation.SIZER.getSize();
             pokemon.setScaleModifier(sizeModifier);
             CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(Objects.requireNonNull(event.getPlayer()), new SizeChangedPacket(() -> pokemon, (double)sizeModifier));
         }
         return Unit.INSTANCE;
-    }
-
-    private static float generateScaleModifier(){
-        return random.nextFloat() * (
-                ModConfig.maxSizeMultiplier - ModConfig.minSizeMultiplier)
-                + ModConfig.minSizeMultiplier;
     }
 
     private static boolean canModifySize(){

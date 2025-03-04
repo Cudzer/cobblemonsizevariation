@@ -4,7 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import dev.cudzer.cobblemonsizevariation.command.ChangeSizeCommand;
 import dev.cudzer.cobblemonsizevariation.config.ModConfig;
 import dev.cudzer.cobblemonsizevariation.event.ModEvents;
+import dev.cudzer.cobblemonsizevariation.sizing.SizeDataManager;
+import dev.cudzer.cobblemonsizevariation.sizing.algorithms.BasicSizer;
+import dev.cudzer.cobblemonsizevariation.sizing.algorithms.GenIXSizer;
+import dev.cudzer.cobblemonsizevariation.sizing.algorithms.ISizer;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +18,15 @@ public final class CobblemonSizeVariation {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static SizeDataManager sizeDataManager;
+    public static ISizer SIZER;
+
     public static Platform platform;
     public static ModDependencyChecker dependencyChecker;
+
+    public static ResourceLocation cobblemonSizeResource(String path){
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 
     public static void init(Platform modPlatform) {
         platform = modPlatform;
@@ -22,10 +34,26 @@ public final class CobblemonSizeVariation {
         dependencyChecker.checkDependencies();
 
         ModConfig.init(platform.getConfigDirectory());
+        sizeDataManager = new SizeDataManager();
+        sizeDataManager.init();
+
+        SIZER = getSizer();
+
         ModEvents.registerEvents();
     }
 
     public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher){
         ChangeSizeCommand.registerCommand(dispatcher);
     }
+
+    private static ISizer getSizer(){
+        String sizerName = ModConfig.sizingAlgorithm;
+        switch (ModConfig.sizingAlgorithm){
+            case "gen9":
+                return new GenIXSizer(CobblemonSizeVariation.sizeDataManager.getDefinition(sizerName));
+            default:
+                return new BasicSizer(CobblemonSizeVariation.sizeDataManager.getDefinition(sizerName));
+        }
+    }
 }
+

@@ -3,7 +3,7 @@ package dev.cudzer.cobblemonsizevariation.utils;
 import com.cobblemon.mod.common.client.CobblemonResources;
 import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import dev.cudzer.cobblemonsizevariation.config.ModConfig;
-import dev.cudzer.cobblemonsizevariation.config.SizeDefinition;
+import dev.cudzer.cobblemonsizevariation.config.Size;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
@@ -14,18 +14,18 @@ import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledTe
 public class PokemonUtils {
 
     public static void buildSizeText(GuiGraphics context, float scaleMultiplier, float x, float y){
-        SizeDefinition sizeDefinition = ModConfig.getSizeDefinition(scaleMultiplier);
-        if(sizeDefinition != null){
+        Size size = CobblemonSizeVariation.SIZER.getSizeInformation(scaleMultiplier);
+        if(size != null){
             drawScaledText(
                     context,
                     CobblemonResources.INSTANCE.getDEFAULT_LARGE(),
-                    Component.literal(sizeDefinition.getName()),
+                    Component.literal(size.getName()),
                     x ,
                     y,
                     0.7f,
                     1.0f,
                     Integer.MAX_VALUE,
-                    Color.decode(sizeDefinition.getColor()).getRGB(),
+                    Color.decode(size.getColor()).getRGB(),
                     false,
                     true,
                     null,

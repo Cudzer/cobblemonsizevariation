@@ -28,13 +28,13 @@ public class ChangeSizeCommand {
         dispatcher.register(Commands.literal("pokesizer")
                 .then(Commands.argument("player", EntityArgument.player()).requires( src -> src.hasPermission(ModConfig.getPermission(ConfigKey.POKESIZER_PERM_NAME)))
                         .then(Commands.argument("member", StringArgumentType.string()).suggests((ctx, sb) -> SharedSuggestionProvider.suggest(getPartyMemberNames(ctx), sb))
-                                .then(Commands.argument("size",DoubleArgumentType.doubleArg((double)ModConfig.minSizeMultiplier, (double)ModConfig.maxSizeMultiplier))
+                                .then(Commands.argument("size",DoubleArgumentType.doubleArg(CobblemonSizeVariation.SIZER.getMinSizeModifier(), CobblemonSizeVariation.SIZER.getMaxSizeModifier()))
                         .executes(ChangeSizeCommand::runResizer)))));
 
         dispatcher.register(Commands.literal("pokesizer")
                 .then(Commands.literal("self").requires( src -> src.hasPermission(ModConfig.getPermission(ConfigKey.POKESIZER_SELF_PERM_NAME)))
                         .then(Commands.argument("member", StringArgumentType.string()).suggests((ctx, sb) -> SharedSuggestionProvider.suggest(getSelfPartyMemberNames(ctx), sb))
-                                .then(Commands.argument("size",DoubleArgumentType.doubleArg((double)ModConfig.minSizeMultiplier, (double)ModConfig.maxSizeMultiplier))
+                                .then(Commands.argument("size",DoubleArgumentType.doubleArg(CobblemonSizeVariation.SIZER.getMinSizeModifier(), CobblemonSizeVariation.SIZER.getMaxSizeModifier()))
                                         .executes(ChangeSizeCommand::runSelfResizer)))));
     }
 
@@ -52,7 +52,6 @@ public class ChangeSizeCommand {
             if(targetPokemon != null){
                 targetPokemon.setScaleModifier((float)sizeModifier);
                 context.getSource().sendSuccess(() -> Component.literal(String.format("The size of %s's %s was changed",targetPlayer.getName().getString(), partyMember)), true);
-                //CobblemonNetwork.INSTANCE.sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() ->  targetPokemon, sizeModifier));
                 CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() -> targetPokemon, sizeModifier));
                 return 0;
             }
@@ -82,7 +81,6 @@ public class ChangeSizeCommand {
             if(targetPokemon != null){
                 targetPokemon.setScaleModifier((float)sizeModifier);
                 context.getSource().sendSuccess(() -> Component.literal(String.format("The size of %s's %s was changed",targetPlayer.getName().getString(), partyMember)), true);
-                //CobblemonNetwork.INSTANCE.sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() ->  targetPokemon, sizeModifier));
                 CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() -> targetPokemon, sizeModifier));
                 return 0;
             }
