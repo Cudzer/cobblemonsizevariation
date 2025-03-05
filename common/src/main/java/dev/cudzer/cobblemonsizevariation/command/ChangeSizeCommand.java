@@ -67,12 +67,13 @@ public class ChangeSizeCommand {
 
             if(party.size() != 0){
                 for (Pokemon targetPokemon : party.toGappyList()){
+                    if(targetPokemon == null) continue;
                     float sizeModifier = CobblemonSizeVariation.SIZER.getSize();
                     targetPokemon.setScaleModifier(sizeModifier);
 
                     CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() -> targetPokemon, (double)sizeModifier));
                 }
-                context.getSource().sendSuccess(() -> Component.literal(String.format("The sizes of %s's team have been randomized",targetPlayer.getName().getString())), true);
+                context.getSource().sendSuccess(() -> Component.literal(String.format("The size of %s's team has been randomized",targetPlayer.getName().getString())), true);
                 return 0;
             }
             else {
@@ -97,16 +98,17 @@ public class ChangeSizeCommand {
 
             if(party.size() != 0){
                 for (Pokemon targetPokemon : party.toGappyList()){
+                    if(targetPokemon == null) continue;
                     float sizeModifier = CobblemonSizeVariation.SIZER.getSize();
                     targetPokemon.setScaleModifier(sizeModifier);
 
                     CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() -> targetPokemon, (double)sizeModifier));
                 }
-                context.getSource().sendSuccess(() -> Component.literal(String.format("The sizes of %s's team have been randomized",targetPlayer.getName().getString())), true);
+                context.getSource().sendSuccess(() -> Component.literal("The size of your team has been randomized"), true);
                 return 0;
             }
             else {
-                context.getSource().sendFailure((Component.literal(String.format("%s doesn't have any Pokemon!",targetPlayer.getName().getString()))));
+                context.getSource().sendFailure((Component.literal("You don't have any Pokemon!")));
                 return  -1;
             }
         }
