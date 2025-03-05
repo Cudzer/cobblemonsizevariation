@@ -98,62 +98,62 @@ public class GenIXSizer implements ISizer{
         JsonObject xxxsDefinition = new JsonObject();
         xxxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "XXXS");
         xxxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "0");
-        xxxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "29");
+        xxxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "0");
         xxxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#1b88cc");
         sizeDefinitions.add(xxxsDefinition);
 
         JsonObject xxsDefinition = new JsonObject();
         xxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "XXS");
-        xxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "30");
-        xxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "59");
+        xxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "1");
+        xxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "24");
         xxsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#1b88cc");
         sizeDefinitions.add(xxsDefinition);
 
         JsonObject xsDefinition = new JsonObject();
         xsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "XS");
-        xsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "60");
-        xsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "89");
+        xsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "25");
+        xsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "59");
         xsDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#1b88cc");
         sizeDefinitions.add(xsDefinition);
 
         JsonObject sDefinition = new JsonObject();
         sDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "S");
-        sDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "90");
-        sDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "109");
+        sDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "60");
+        sDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "99");
         sDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#1bcc9a");
         sizeDefinitions.add(sDefinition);
 
         JsonObject mDefinition = new JsonObject();
         mDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "M");
-        mDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "110");
-        mDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "139");
+        mDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "100");
+        mDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "155");
         mDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#ffffff");
         sizeDefinitions.add(mDefinition);
 
         JsonObject lDefinition = new JsonObject();
         lDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "L");
-        lDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "140");
-        lDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "168");
+        lDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "156");
+        lDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "195");
         lDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#e6ff2b");
         sizeDefinitions.add(lDefinition);
 
         JsonObject xlDefinition = new JsonObject();
         xlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "XL");
-        xlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "169");
-        xlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "197");
+        xlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "196");
+        xlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "230");
         xlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#f21800");
         sizeDefinitions.add(xlDefinition);
 
         JsonObject xxlDefinition = new JsonObject();
         xxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "XXL");
-        xxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "198");
-        xxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "226");
+        xxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "231");
+        xxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "254");
         xxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#f21800");
         sizeDefinitions.add(xxlDefinition);
 
         JsonObject xxxlDefinition = new JsonObject();
         xxxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_NAME, "XXXL");
-        xxxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "227");
+        xxxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MIN, "255");
         xxxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_MAX, "255");
         xxxlDefinition.addProperty(ConfigKey.SIZE_DEFINITION_COLOR, "#f21800");
         sizeDefinitions.add(xxxlDefinition);
