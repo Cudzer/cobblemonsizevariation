@@ -30,7 +30,7 @@ public class ChangeSizeCommand {
         dispatcher.register(
                 literal("pokesizer")
                         .then(
-                                argument("player", EntityArgument.player())
+                                argument("player", EntityArgument.player()).requires(src -> src.hasPermission(ModConfig.getPermission(ConfigKey.POKESIZER_PERM_NAME)))
                                         .executes(ChangeSizeCommand::runResizeAll)
                                         .then(
                                                 argument("member", StringArgumentType.string())
@@ -41,9 +41,9 @@ public class ChangeSizeCommand {
                                                                         .executes(ChangeSizeCommand::runResizer)
                                                         )
                                         )
-                        ).requires(src -> src.hasPermission(ModConfig.getPermission(ConfigKey.POKESIZER_PERM_NAME)))
+                        )
                         .then(
-                                literal("self")
+                                literal("self").requires(src -> src.hasPermission(ModConfig.getPermission(ConfigKey.POKESIZER_SELF_PERM_NAME)))
                                         .executes(ChangeSizeCommand::runResizeSelfAll)
                                         .then(
                                                 argument("member", StringArgumentType.string())
@@ -54,7 +54,7 @@ public class ChangeSizeCommand {
                                                                         .executes(ChangeSizeCommand::runSelfResizer)
                                                         )
                                         )
-                        ).requires(src -> src.hasPermission(ModConfig.getPermission(ConfigKey.POKESIZER_SELF_PERM_NAME)))
+                        )
         );
     }
 
