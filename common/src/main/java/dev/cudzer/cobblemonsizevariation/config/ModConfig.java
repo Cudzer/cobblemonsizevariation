@@ -20,6 +20,8 @@ public class ModConfig {
 
     public static String sizingAlgorithm;
 
+    public static boolean biasSizeTowardAverage;
+
     public static HashMap<String, Integer> perms = new HashMap<>();
 
     private static Path fullPath;
@@ -57,6 +59,7 @@ public class ModConfig {
         defaultConfig.add(ConfigKey.PERMISSIONS, generateDefaultPermissions());
 
         defaultConfig.addProperty(ConfigKey.SIZING_ALGORITHM, "basic");
+        defaultConfig.addProperty(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE, false);
     }
 
     private static void rewriteConfig(Gson gson, JsonObject defaultConfig, JsonObject finalConfig){
@@ -85,6 +88,7 @@ public class ModConfig {
         sizeModificationChance = finalConfiguration.get(ConfigKey.SIZE_MODIFICATION_CHANCE).getAsFloat();
         preventShoulderMountSize = finalConfiguration.get(ConfigKey.PREVENT_SHOULDER_MOUNT_SIZE).getAsFloat();
         sizingAlgorithm = finalConfiguration.get(ConfigKey.SIZING_ALGORITHM).getAsString();
+        biasSizeTowardAverage = finalConfiguration.get(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE).getAsBoolean();
         JsonArray permissionConfig = finalConfiguration.get(ConfigKey.PERMISSIONS).getAsJsonArray();
 
         perms.clear();

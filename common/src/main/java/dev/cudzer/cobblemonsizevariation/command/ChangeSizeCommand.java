@@ -40,6 +40,10 @@ public class ChangeSizeCommand {
                                                                 argument("size", DoubleArgumentType.doubleArg(CobblemonSizeVariation.SIZER.getMinSizeModifier(), CobblemonSizeVariation.SIZER.getMaxSizeModifier()))
                                                                         .executes(ChangeSizeCommand::runResizer)
                                                         )
+                                                        .then(
+                                                                literal("check")
+                                                                        .executes(ChangeSizeCommand::checkSize)
+                                                        )
                                         )
                         )
                         .then(
@@ -53,35 +57,35 @@ public class ChangeSizeCommand {
                                                                 argument("size", DoubleArgumentType.doubleArg(CobblemonSizeVariation.SIZER.getMinSizeModifier(), CobblemonSizeVariation.SIZER.getMaxSizeModifier()))
                                                                         .executes(ChangeSizeCommand::runSelfResizer)
                                                         )
+                                                        .then(
+                                                                literal("check")
+                                                                        .executes(ChangeSizeCommand::checkSizeSelf)
+                                                        )
                                         )
                         )
         );
     }
 
     private static int runResizeAll(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
 
-        if(context.getSource().isPlayer()){
-            ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
+        PlayerPartyStore party = PlayerExtensionsKt.party(targetPlayer);
 
-            PlayerPartyStore party = PlayerExtensionsKt.party(targetPlayer);
+        if(party.size() != 0){
+            for (Pokemon targetPokemon : party.toGappyList()){
+                if(targetPokemon == null) continue;
+                float sizeModifier = CobblemonSizeVariation.SIZER.getSize();
+                targetPokemon.setScaleModifier(sizeModifier);
 
-            if(party.size() != 0){
-                for (Pokemon targetPokemon : party.toGappyList()){
-                    if(targetPokemon == null) continue;
-                    float sizeModifier = CobblemonSizeVariation.SIZER.getSize();
-                    targetPokemon.setScaleModifier(sizeModifier);
-
-                    CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() -> targetPokemon, (double)sizeModifier));
-                }
-                context.getSource().sendSuccess(() -> Component.literal(String.format("The size of %s's team has been randomized",targetPlayer.getName().getString())), true);
-                return 0;
+                CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(targetPlayer, new SizeChangedPacket(() -> targetPokemon, (double)sizeModifier));
             }
-            else {
-                context.getSource().sendFailure((Component.literal(String.format("%s doesn't have any Pokemon!",targetPlayer.getName().getString()))));
-                return  -1;
-            }
+            context.getSource().sendSuccess(() -> Component.literal(String.format("The size of %s's team has been randomized",targetPlayer.getName().getString())), true);
+            return 0;
         }
-        return -1;
+        else {
+            context.getSource().sendFailure((Component.literal(String.format("%s doesn't have any Pokemon!",targetPlayer.getName().getString()))));
+            return  -1;
+        }
     }
 
     private static int runResizeSelfAll(CommandContext<CommandSourceStack> context) {
@@ -116,26 +120,20 @@ public class ChangeSizeCommand {
     }
 
     private static int runResizer(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        if(context.getSource().isPlayer()){
-            ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
 
-            String partyMember = StringArgumentType.getString(context, "member");
-            double sizeModifier = DoubleArgumentType.getDouble(context, "size");
+        String partyMember = StringArgumentType.getString(context, "member");
+        double sizeModifier = DoubleArgumentType.getDouble(context, "size");
 
-            return resize(context, targetPlayer, partyMember, (float)sizeModifier, false);
-        }
-        return -1;
+        return resize(context, targetPlayer, partyMember, (float)sizeModifier, false);
     }
 
     private static int runRandomResizer(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        if(context.getSource().isPlayer()){
-            ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
 
-            String partyMember = StringArgumentType.getString(context, "member");
+        String partyMember = StringArgumentType.getString(context, "member");
 
-            return resize(context, targetPlayer, partyMember, CobblemonSizeVariation.SIZER.getSize(), false);
-        }
-        return -1;
+        return resize(context, targetPlayer, partyMember, CobblemonSizeVariation.SIZER.getSize(), false);
     }
 
     private static int runRandomSelfResizer(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
@@ -168,6 +166,30 @@ public class ChangeSizeCommand {
             double sizeModifier = DoubleArgumentType.getDouble(context, "size");
 
             return resize(context, targetPlayer, partyMember, (float)sizeModifier, true);
+        }
+        return -1;
+    }
+
+    private static int checkSize(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(context, "player");
+
+        String partyMember = StringArgumentType.getString(context, "member");
+
+        return getSize(context, targetPlayer, partyMember, false);
+    }
+
+    private static int checkSizeSelf(CommandContext<CommandSourceStack> context){
+        if(context.getSource().isPlayer()){
+            ServerPlayer targetPlayer = context.getSource().getPlayer();
+
+            if(targetPlayer == null){
+                context.getSource().sendFailure((Component.literal("You must be a player to run this command")));
+                return -1;
+            }
+
+            String partyMember = StringArgumentType.getString(context, "member");
+
+            return getSize(context, targetPlayer, partyMember, true);
         }
         return -1;
     }
@@ -222,6 +244,59 @@ public class ChangeSizeCommand {
                 CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(player, new SizeChangedPacket(() -> finalTargetPokemon1, (double)size));
                 return 0;
             }
+        }
+        else {
+            context.getSource().sendFailure((Component.literal(failure)));
+            return  -1;
+        }
+    }
+
+    private static int getSize(CommandContext<CommandSourceStack> context, ServerPlayer player, String pokemon, boolean isSelf){
+        PlayerPartyStore party = PlayerExtensionsKt.party(player);
+
+        String success;
+        String failure;
+
+        Pokemon targetPokemon = null;
+        if(getPartySlots().contains(pokemon)){
+            int slot = PartySlot.valueOf(pokemon).getSlot();
+            targetPokemon  = party.get(slot);
+            if(targetPokemon != null){
+                var pokemonSize = targetPokemon.getScaleModifier();
+
+                success = isSelf ? String.format("The size of your pokemon in %s is %.2f", PartySlot.valueOf(pokemon).getDisplayText(), pokemonSize) :
+                        String.format("The size of %s's pokemon in %s is %.2f!", player.getName().getString(), PartySlot.valueOf(pokemon).getDisplayText(), pokemonSize);
+
+                failure = isSelf ? String.format("You have a have a pokemon in %s", PartySlot.valueOf(pokemon).getDisplayText()) :
+                        String.format("%s doesn't have a pokemon in %s", player.getName().getString(), PartySlot.valueOf(pokemon).getDisplayText());
+            }
+            else {
+                success = "";
+                failure = isSelf ? String.format("You have a have a pokemon in %s", pokemon) :
+                        String.format("%s doesn't have a pokemon in %s", player.getName().getString(), pokemon);
+            }
+        }
+        else{
+            for(Pokemon pok : party.toGappyList()){
+                if(pok == null) continue;
+                if(pok.getSpecies().getName().equalsIgnoreCase(pokemon)) targetPokemon = pok;
+            }
+            if(targetPokemon != null){
+                var pokemonSize = targetPokemon.getScaleModifier();
+                success = isSelf ? String.format("The size of your %s is %.2f", targetPokemon.getSpecies().getName(), pokemonSize) :
+                        String.format("The size of %s's %s is %.2f", player.getName().getString(), targetPokemon.getSpecies().getName(), pokemonSize);
+
+                failure = "";
+            } else {
+                success = "";
+                failure = isSelf ? String.format("You have a have a %s", pokemon) :
+                        String.format("%s doesn't have a %s", player.getName().getString(), pokemon);
+            }
+        }
+
+        if(targetPokemon != null){
+            context.getSource().sendSuccess(() -> Component.literal(success), true);
+            return 0;
         }
         else {
             context.getSource().sendFailure((Component.literal(failure)));

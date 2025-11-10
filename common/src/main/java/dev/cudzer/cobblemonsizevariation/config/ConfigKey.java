@@ -12,6 +12,7 @@ public class ConfigKey {
     public static final String MAXIMUM_SIZE_MULTIPLIER = "maxSizeMultiplier";
     //public static final String SIZE_DEFINITIONS = "sizeDefinitions";
     public static final String SIZING_ALGORITHM = "sizingAlgorithm";
+    public static final String BIAS_SIZE_TOWARD_AVERAGE = "biasSizeTowardAverage";
 
     //SIZE DEFINITION KEYS
     public static final String SIZE_DEFINITION_NAME = "name";

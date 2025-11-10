@@ -1,8 +1,10 @@
 package dev.cudzer.cobblemonsizevariation;
 
 import com.mojang.brigadier.CommandDispatcher;
+import dev.architectury.registry.ReloadListenerRegistry;
 import dev.cudzer.cobblemonsizevariation.command.ChangeSizeCommand;
 import dev.cudzer.cobblemonsizevariation.config.ModConfig;
+import dev.cudzer.cobblemonsizevariation.data.CustomSizeDataManager;
 import dev.cudzer.cobblemonsizevariation.event.ModEvents;
 import dev.cudzer.cobblemonsizevariation.sizing.SizeDataManager;
 import dev.cudzer.cobblemonsizevariation.sizing.algorithms.BasicSizer;
@@ -10,6 +12,7 @@ import dev.cudzer.cobblemonsizevariation.sizing.algorithms.GenIXSizer;
 import dev.cudzer.cobblemonsizevariation.sizing.algorithms.ISizer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +39,8 @@ public final class CobblemonSizeVariation {
         ModConfig.init(platform.getConfigDirectory());
         sizeDataManager = new SizeDataManager();
         sizeDataManager.init();
+
+        ReloadListenerRegistry.register(PackType.SERVER_DATA, new CustomSizeDataManager(), cobblemonSizeResource("custom_sizes"));
 
         SIZER = getSizer();
 

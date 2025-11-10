@@ -3,6 +3,7 @@ package dev.cudzer.cobblemonsizevariation.sizing.algorithms;
 import com.google.gson.*;
 import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import dev.cudzer.cobblemonsizevariation.config.ConfigKey;
+import dev.cudzer.cobblemonsizevariation.config.ModConfig;
 import dev.cudzer.cobblemonsizevariation.config.Size;
 import dev.cudzer.cobblemonsizevariation.sizing.SizeDefinition;
 import dev.cudzer.cobblemonsizevariation.utils.FileUtils;
@@ -27,14 +28,47 @@ public class BasicSizer implements ISizer{
 
     @Override
     public float getSize() {
-        return new Random().nextFloat() * (
-                maxSizeModifier - minSizeModifier)
-                + minSizeModifier;
+        float result = 0;
+        if(ModConfig.biasSizeTowardAverage){
+            for(int i = 0; i < 3; i++){
+                result += new Random().nextFloat() * (((maxSizeModifier - minSizeModifier) + minSizeModifier) / 3);
+            }
+        }
+        else{
+            result = new Random().nextFloat() * (
+                    maxSizeModifier - minSizeModifier)
+                    + minSizeModifier;
+        }
+        return result;
+    }
+
+    @Override
+    public float getSize(float min, float max){
+        float result = 0;
+        if(ModConfig.biasSizeTowardAverage){
+            for(int i = 0; i < 3; i++){
+                result += new Random().nextFloat() * (((max - min) + min) / 3);
+            }
+        }
+        else{
+            result = new Random().nextFloat() * (
+                    max - min)
+                    + min;
+        }
+        return result;
     }
 
     @Override
     public Size getSizeInformation(float size) {
-        for(Size s : sizeDefinition.getSizes()){
+        var sizeDefinitions = sizeDefinition.getSizes();
+        if(size > maxSizeModifier){
+            //We can assume that in this case the size is coming from a custom file that has a max size greater than the sizers max value
+            return sizeDefinitions.getLast();
+        }
+        else if(size < minSizeModifier){
+            return sizeDefinitions.getFirst();
+        }
+        for(Size s : sizeDefinitions){
             if(size >= Float.parseFloat(s.getMin()) && size <= Float.parseFloat(s.getMax())){
                 return s;
             }

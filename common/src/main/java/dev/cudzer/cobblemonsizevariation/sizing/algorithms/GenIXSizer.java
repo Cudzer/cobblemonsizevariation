@@ -3,6 +3,7 @@ package dev.cudzer.cobblemonsizevariation.sizing.algorithms;
 import com.google.gson.*;
 import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import dev.cudzer.cobblemonsizevariation.config.ConfigKey;
+import dev.cudzer.cobblemonsizevariation.config.ModConfig;
 import dev.cudzer.cobblemonsizevariation.config.Size;
 import dev.cudzer.cobblemonsizevariation.sizing.SizeDefinition;
 import dev.cudzer.cobblemonsizevariation.utils.FileUtils;
@@ -29,16 +30,50 @@ public class GenIXSizer implements ISizer{
     @Override
     public float getSize() {
         //convert the integer number into a scaled float number
-        int value = new Random().nextInt(0, 255);
+        float result = 0;
+        if(ModConfig.biasSizeTowardAverage){
+            for(int i = 0; i < 3; i++){
+                int value = (new Random().nextInt(0, 255));
+                result += (minSizeModifier + ((float) value / 255) * (maxSizeModifier - minSizeModifier)) / 3;
+            }
+        }
+        else {
+            int value = new Random().nextInt(0, 255);
+            result = minSizeModifier + ((float) value / 255) * (maxSizeModifier - minSizeModifier);
+        }
+        return result;
+    }
 
-        return minSizeModifier + ((float) value / 255) * (maxSizeModifier - minSizeModifier);
+    @Override
+    public float getSize(float min, float max) {
+        //convert the integer number into a scaled float number
+        float result = 0;
+        if(ModConfig.biasSizeTowardAverage){
+            for(int i = 0; i < 3; i++){
+                int value = new Random().nextInt(0, 255);
+                result += (min + ((float) value / 255) * (max - min)) / 3;
+            }
+        }
+        else {
+            int value = new Random().nextInt(0, 255);
+            result = min + ((float) value / 255) * (max - min);
+        }
+        return result;
     }
 
     @Override
     public Size getSizeInformation(float size) {
         int value = convertSizeToInt(size);
 
-        for(Size s : sizeDefinition.getSizes()){
+        var sizeDefinitions = sizeDefinition.getSizes();
+        if(size > maxSizeModifier){
+            //We can assume that in this case the size is coming from a custom file that has a max size greater than the sizers max value
+            return sizeDefinitions.getLast();
+        }
+        else if(size < minSizeModifier){
+            return sizeDefinitions.getFirst();
+        }
+        for(Size s : sizeDefinitions){
             if(value >= Integer.parseInt(s.getMin()) && value <= Integer.parseInt(s.getMax())){
                 return s;
             }
