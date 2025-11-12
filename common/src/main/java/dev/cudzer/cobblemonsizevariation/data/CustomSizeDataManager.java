@@ -1,6 +1,5 @@
 package dev.cudzer.cobblemonsizevariation.data;
 
-import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -11,16 +10,19 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+/**
+ * Loads and caches custom Pokémon size definitions from data/custom_sizes/.
+ * Builds both a file map and a species map
+ */
 public class CustomSizeDataManager extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new Gson();
 
     protected static Map<ResourceLocation, PokemonSize> data = new HashMap<>();
     protected static List<ResourceLocation> resourceLocationList = new ArrayList<>();
+
+    protected static Map<String, PokemonSize> speciesSizeMap = new HashMap<>();
 
     public CustomSizeDataManager() {
         super(GSON, CobblemonSizeVariation.cobblemonSizeResource("custom_sizes").getPath());
@@ -32,6 +34,7 @@ public class CustomSizeDataManager extends SimpleJsonResourceReloadListener {
 
         Map<ResourceLocation, PokemonSize> newMap = new HashMap<>();
         List<ResourceLocation> newResourceLocationList = new ArrayList<>();
+        Map<String, PokemonSize> newSpeciesMap = new HashMap<>();
 
         data.clear();
         resourceLocationList.clear();
@@ -46,22 +49,22 @@ public class CustomSizeDataManager extends SimpleJsonResourceReloadListener {
                         newMap.put(key, pokemonSize);
                         pokemonSize.setJsonLocation(key);
                         newResourceLocationList.add(key);
+
+                        for (String speciesName : pokemonSize.speciesList) {
+                            if (speciesName == null || speciesName.isBlank()) continue;
+                            newSpeciesMap.put(speciesName.toLowerCase(Locale.ROOT), pokemonSize);
+                        }
                     })
-                    .ifError( partial -> {
-                       CobblemonSizeVariation.LOGGER.error(String.format("Failed to parse json data for %s due to %s", key, partial.message()));
-                    });
+                    .ifError( partial -> CobblemonSizeVariation.LOGGER.error("Failed to parse json data for {} due to {}", key, partial.message()));
         }
         resourceLocationList = newResourceLocationList;
         data = newMap;
-        CobblemonSizeVariation.LOGGER.info(String.format("Loaded %s custom size files", data.size()));
+        speciesSizeMap = newSpeciesMap;
+        CobblemonSizeVariation.LOGGER.info("Loaded {} custom size files", data.size());
     }
 
-    public static PokemonSize getCustomSizeFile(Species pokemon){
-        for(var ps : data.values()){
-            if(ps.isPokemonIncluded(pokemon)){
-                return ps;
-            }
-        }
-        return null;
+    public static PokemonSize getCustomSizeFile(Species species) {
+        if (species == null) return null;
+        return speciesSizeMap.get(species.getName().toLowerCase(Locale.ROOT));
     }
 }

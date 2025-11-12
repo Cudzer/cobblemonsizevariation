@@ -15,6 +15,7 @@ import java.util.Random;
 
 public class BasicSizer implements ISizer{
 
+    private static final Random RNG = new Random();
     private final SizeDefinition sizeDefinition;
 
     private final float minSizeModifier;
@@ -31,11 +32,11 @@ public class BasicSizer implements ISizer{
         float result = 0;
         if(ModConfig.biasSizeTowardAverage){
             for(int i = 0; i < 3; i++){
-                result += new Random().nextFloat() * (((maxSizeModifier - minSizeModifier) + minSizeModifier) / 3);
+                result += RNG.nextFloat() * (((maxSizeModifier - minSizeModifier) + minSizeModifier) / 3);
             }
         }
         else{
-            result = new Random().nextFloat() * (
+            result = RNG.nextFloat() * (
                     maxSizeModifier - minSizeModifier)
                     + minSizeModifier;
         }
@@ -47,11 +48,11 @@ public class BasicSizer implements ISizer{
         float result = 0;
         if(ModConfig.biasSizeTowardAverage){
             for(int i = 0; i < 3; i++){
-                result += new Random().nextFloat() * (((max - min) + min) / 3);
+                result += RNG.nextFloat() * (((max - min) + min) / 3);
             }
         }
         else{
-            result = new Random().nextFloat() * (
+            result = RNG.nextFloat() * (
                     max - min)
                     + min;
         }
@@ -62,14 +63,13 @@ public class BasicSizer implements ISizer{
     public Size getSizeInformation(float size) {
         var sizeDefinitions = sizeDefinition.getSizes();
         if(size > maxSizeModifier){
-            //We can assume that in this case the size is coming from a custom file that has a max size greater than the sizers max value
             return sizeDefinitions.getLast();
         }
         else if(size < minSizeModifier){
             return sizeDefinitions.getFirst();
         }
         for(Size s : sizeDefinitions){
-            if(size >= Float.parseFloat(s.getMin()) && size <= Float.parseFloat(s.getMax())){
+            if(size >= Float.parseFloat(s.min()) && size <= Float.parseFloat(s.max())){
                 return s;
             }
         }

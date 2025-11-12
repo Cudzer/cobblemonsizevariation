@@ -15,6 +15,7 @@ import java.util.Random;
 
 public class GenIXSizer implements ISizer{
 
+    private static final Random RNG = new Random();
     private final SizeDefinition sizeDefinition;
 
     private final float minSizeModifier;
@@ -29,16 +30,15 @@ public class GenIXSizer implements ISizer{
 
     @Override
     public float getSize() {
-        //convert the integer number into a scaled float number
         float result = 0;
         if(ModConfig.biasSizeTowardAverage){
             for(int i = 0; i < 3; i++){
-                int value = (new Random().nextInt(0, 255));
+                int value = (RNG.nextInt(0, 255));
                 result += (minSizeModifier + ((float) value / 255) * (maxSizeModifier - minSizeModifier)) / 3;
             }
         }
         else {
-            int value = new Random().nextInt(0, 255);
+            int value = RNG.nextInt(0, 255);
             result = minSizeModifier + ((float) value / 255) * (maxSizeModifier - minSizeModifier);
         }
         return result;
@@ -46,16 +46,15 @@ public class GenIXSizer implements ISizer{
 
     @Override
     public float getSize(float min, float max) {
-        //convert the integer number into a scaled float number
         float result = 0;
         if(ModConfig.biasSizeTowardAverage){
             for(int i = 0; i < 3; i++){
-                int value = new Random().nextInt(0, 255);
+                int value = RNG.nextInt(0, 255);
                 result += (min + ((float) value / 255) * (max - min)) / 3;
             }
         }
         else {
-            int value = new Random().nextInt(0, 255);
+            int value = RNG.nextInt(0, 255);
             result = min + ((float) value / 255) * (max - min);
         }
         return result;
@@ -67,14 +66,13 @@ public class GenIXSizer implements ISizer{
 
         var sizeDefinitions = sizeDefinition.getSizes();
         if(size > maxSizeModifier){
-            //We can assume that in this case the size is coming from a custom file that has a max size greater than the sizers max value
             return sizeDefinitions.getLast();
         }
         else if(size < minSizeModifier){
             return sizeDefinitions.getFirst();
         }
         for(Size s : sizeDefinitions){
-            if(value >= Integer.parseInt(s.getMin()) && value <= Integer.parseInt(s.getMax())){
+            if(value >= Integer.parseInt(s.min()) && value <= Integer.parseInt(s.max())){
                 return s;
             }
         }

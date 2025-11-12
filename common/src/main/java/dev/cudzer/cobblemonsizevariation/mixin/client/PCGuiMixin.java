@@ -8,7 +8,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
+/*
+*   Adds the size text to the PC GUI
+* */
 @Mixin(value = PCGUI.class)
 public class PCGuiMixin {
     @Inject(
@@ -17,7 +19,7 @@ public class PCGuiMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/screens/Screen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V")
     )
-    private void displaySizeInfo(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci){
+    private void csv$displaySizeInfo(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci){
         PCGUI pcgui = ((PCGUI) (Object) this);
         int x = (pcgui.width - PCGUI.BASE_WIDTH) / 2;
         int y = (pcgui.height - PCGUI.BASE_HEIGHT) / 2;

@@ -3,6 +3,7 @@ package dev.cudzer.cobblemonsizevariation.fabric;
 import com.cobblemon.mod.common.NetworkManager;
 import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import dev.cudzer.cobblemonsizevariation.Platform;
+import dev.cudzer.cobblemonsizevariation.fabric.events.EntityInteractEvents;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
@@ -18,10 +19,10 @@ public final class CobblemonSizeVariationFabric implements ModInitializer, Platf
         // Run our common setup.
         CobblemonSizeVariation.init(this);
         networkManager.registerMessages();
+        EntityInteractEvents.register();
 
-        CommandRegistrationCallback.EVENT.register(((commandDispatcher, commandBuildContext, commandSelection) -> {
-            CobblemonSizeVariation.registerCommands(commandDispatcher);
-        }));
+        CommandRegistrationCallback.EVENT.register(((commandDispatcher, commandBuildContext, commandSelection) ->
+                CobblemonSizeVariation.registerCommands(commandDispatcher)));
     }
 
     @Override

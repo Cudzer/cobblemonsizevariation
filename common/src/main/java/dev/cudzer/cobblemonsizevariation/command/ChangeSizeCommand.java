@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static net.minecraft.commands.Commands.argument;
@@ -136,7 +137,7 @@ public class ChangeSizeCommand {
         return resize(context, targetPlayer, partyMember, CobblemonSizeVariation.SIZER.getSize(), false);
     }
 
-    private static int runRandomSelfResizer(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int runRandomSelfResizer(CommandContext<CommandSourceStack> context) {
         if(context.getSource().isPlayer()){
             ServerPlayer targetPlayer = context.getSource().getPlayer();
 
@@ -152,7 +153,7 @@ public class ChangeSizeCommand {
         return -1;
     }
 
-    private static int runSelfResizer(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int runSelfResizer(CommandContext<CommandSourceStack> context) {
 
         if(context.getSource().isPlayer()){
             ServerPlayer targetPlayer = context.getSource().getPlayer();
@@ -212,7 +213,6 @@ public class ChangeSizeCommand {
                     String.format("%s doesn't have a pokemon in %s", player.getName().getString(), PartySlot.valueOf(pokemon).getDisplayText());
         }
         else{
-            //targetPokemon = party.toGappyList().stream().filter(p -> p.getSpecies().getName().equals(pokemon)).findFirst().orElse(null);
             for(Pokemon pok : party.toGappyList()){
                 if(pok == null) continue;
                 if(pok.getSpecies().getName().equalsIgnoreCase(pokemon)) targetPokemon = pok;
@@ -310,19 +310,27 @@ public class ChangeSizeCommand {
 
         Set<String> partyMembers = new HashSet<>();
 
-        party.forEach(p -> partyMembers.add(p.getSpecies().getName()));
+        party.toGappyList().stream()
+                .filter(Objects::nonNull)
+                .map(p -> p.getSpecies().getName())
+                .forEach(partyMembers::add);
+
         partyMembers.addAll(getPartySlots());
         return partyMembers;
     }
 
-    private static Set<String> getSelfPartyMemberNames(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static Set<String> getSelfPartyMemberNames(CommandContext<CommandSourceStack> context) {
         ServerPlayer targetPlayer = context.getSource().getPlayer();
         if(targetPlayer != null){
             PlayerPartyStore party = PlayerExtensionsKt.party(targetPlayer);
 
             Set<String> partyMembers = new HashSet<>();
 
-            party.forEach(p -> partyMembers.add(p.getSpecies().getName()));
+            party.toGappyList().stream()
+                    .filter(Objects::nonNull)
+                    .map(p -> p.getSpecies().getName())
+                    .forEach(partyMembers::add);
+
             partyMembers.addAll(getPartySlots());
             return partyMembers;
         }

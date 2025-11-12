@@ -9,6 +9,7 @@ import dev.cudzer.cobblemonsizevariation.utils.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class SizeDataManager {
@@ -35,23 +36,33 @@ public class SizeDataManager {
                         SizeDefinition definition = result.getFirst();
                         newDefinitions.add(definition);
                     })
-                    .ifError( partial -> {
-                        CobblemonSizeVariation.LOGGER.error(String.format("Failed to parse json data when loading size files. Error: %s", partial.message()));
-                    });
+                    .ifError( partial -> CobblemonSizeVariation.LOGGER.error("Failed to parse json data when loading size files. Error: {}", partial.message()));
         }
 
         sizeDefinitions.addAll(newDefinitions);
         newDefinitions.clear();
 
-        CobblemonSizeVariation.LOGGER.info(String.format("Loaded %s size definitions.", sizeDefinitions.size()));
+        CobblemonSizeVariation.LOGGER.info("Loaded {} size definitions.", sizeDefinitions.size());
     }
 
-    public SizeDefinition getDefinition(String name){
-        var definition = sizeDefinitions.
-                stream()
-                .filter(d -> d.name.equalsIgnoreCase(name))
-                .findFirst();
+    public SizeDefinition getDefinition(String name) {
+        Objects.requireNonNull(name, "Definition name cannot be null");
+        SizeDefinition def = findByName(name);
 
-        return definition.orElse(null);
+        if (def != null) return def;
+
+        CobblemonSizeVariation.LOGGER.warn("[CSV] Unknown SizeDefinition '{}'. Falling back to 'basic'.", name);
+        SizeDefinition fallback = findByName("basic");
+        if (fallback == null)
+            throw new IllegalStateException("[CSV] No 'basic' SizeDefinition found. Mod cannot continue safely.");
+
+        return fallback;
+    }
+
+    private SizeDefinition findByName(String name) {
+        return sizeDefinitions.stream()
+                .filter(d -> d.name.equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 }

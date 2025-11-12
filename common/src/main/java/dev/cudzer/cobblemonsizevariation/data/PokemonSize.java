@@ -3,7 +3,6 @@ package dev.cudzer.cobblemonsizevariation.data;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
@@ -28,10 +27,6 @@ public class PokemonSize {
         this.maxSize = maxSize;
     }
 
-    public List<String> getSpeciesList() {
-        return speciesList;
-    }
-
     public float getMinSize() {
         return minSize;
     }
@@ -42,15 +37,6 @@ public class PokemonSize {
 
     public void setJsonLocation(ResourceLocation jsonLocation) {
         this.jsonLocation = jsonLocation;
-    }
-
-    public ResourceLocation getJsonLocation() {
-        try{
-            return jsonLocation;
-        }catch (Exception e){
-            CobblemonSizeVariation.LOGGER.error(String.format("Could not find json location due to %s", e));
-        }
-        return ResourceLocation.parse("");
     }
 
     public boolean isPokemonIncluded(Species species){

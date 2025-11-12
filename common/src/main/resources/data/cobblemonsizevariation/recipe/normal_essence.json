@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "   ",
+    "ABA",
+    "   "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "B": {
+      "item": "cobblemon:exp_candy_m"
+    }
+  },
+  "result": {
+    "id": "cobblemonsizevariation:normal_essence",
+    "count": 1
+  },
+  "show_notification": false
+}

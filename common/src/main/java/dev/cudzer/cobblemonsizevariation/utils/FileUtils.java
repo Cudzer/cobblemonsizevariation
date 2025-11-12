@@ -10,8 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation.cobblemonSizeResource;
-
 public class FileUtils {
     public static Path getSizePath(){
         return CobblemonSizeVariation.platform.getConfigDirectory().resolve(CobblemonSizeVariation.MOD_ID).resolve("sizes");
@@ -30,7 +28,7 @@ public class FileUtils {
             return content;
         }
         catch (IOException e){
-            CobblemonSizeVariation.LOGGER.error(String.format("Could not create size file: %s", file));
+            CobblemonSizeVariation.LOGGER.error("Could not create size file: {}", file);
             return null;
         }
     }

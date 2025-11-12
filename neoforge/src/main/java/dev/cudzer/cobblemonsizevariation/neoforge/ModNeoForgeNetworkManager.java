@@ -19,13 +19,11 @@ public class ModNeoForgeNetworkManager implements NetworkManager {
 
     @SubscribeEvent
     public static void registerMessages(RegisterPayloadHandlersEvent event) {
-        CobblemonSizeVariation.LOGGER.info("Registering packets for sizevariation");
+        CobblemonSizeVariation.LOGGER.info("Registering packets for Cobblemon Size Variations");
         var registrar = event.registrar(CobblemonSizeVariation.MOD_ID).versioned(PROTOCOL_VERSION);
 
         ModNetwork.s2cPayloads.stream().map(NeoForgePacketInfo::new).forEach(
-                np -> {
-                    np.registerToClient(registrar);
-                });
+                np -> np.registerToClient(registrar));
     }
 
     @Override

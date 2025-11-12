@@ -21,6 +21,7 @@ public class ModConfig {
     public static String sizingAlgorithm;
 
     public static boolean biasSizeTowardAverage;
+    public static boolean enableEssenceRecipes;
 
     public static HashMap<String, Integer> perms = new HashMap<>();
 
@@ -60,6 +61,7 @@ public class ModConfig {
 
         defaultConfig.addProperty(ConfigKey.SIZING_ALGORITHM, "basic");
         defaultConfig.addProperty(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE, false);
+        defaultConfig.addProperty(ConfigKey.ENABLE_ESSENCE_RECIPES, false);
     }
 
     private static void rewriteConfig(Gson gson, JsonObject defaultConfig, JsonObject finalConfig){
@@ -69,10 +71,6 @@ public class ModConfig {
                     CobblemonSizeVariation.LOGGER.info("Adding new field '{}' to the config", k);
                     finalConfig.add(k, defaultConfig.get(k));
                 });
-
-        //remove old properties
-        //Take this out in case people want to take the size values and move them to the new configurations
-        //finalConfig.keySet().removeIf(k -> !defaultConfig.has(k));
 
         try{
             Files.createDirectories(Paths.get(fullPath.toString()).getParent());
@@ -89,6 +87,7 @@ public class ModConfig {
         preventShoulderMountSize = finalConfiguration.get(ConfigKey.PREVENT_SHOULDER_MOUNT_SIZE).getAsFloat();
         sizingAlgorithm = finalConfiguration.get(ConfigKey.SIZING_ALGORITHM).getAsString();
         biasSizeTowardAverage = finalConfiguration.get(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE).getAsBoolean();
+        enableEssenceRecipes = finalConfiguration.get(ConfigKey.ENABLE_ESSENCE_RECIPES).getAsBoolean();
         JsonArray permissionConfig = finalConfiguration.get(ConfigKey.PERMISSIONS).getAsJsonArray();
 
         perms.clear();
@@ -106,7 +105,7 @@ public class ModConfig {
     }
 
     public static int getPermission(String permKey){
-        return perms.get(permKey);
+        return perms.getOrDefault(permKey, 0);
     }
 
     private static JsonArray generateDefaultPermissions(){

@@ -9,6 +9,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/*
+ *   Adds the size text to the Party Summary GUI
+ * */
 @Mixin(value = Summary.class)
 public class SummaryMixin {
     @Inject(
@@ -17,7 +20,7 @@ public class SummaryMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/screens/Screen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V")
     )
-    private void displaySizeIcon(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci){
+    private void csv$displaySizeIcon(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci){
         Summary summary = (Summary) (Object) this;
         int x = (summary.width - Summary.BASE_WIDTH) / 2;
         int y = (summary.height - Summary.BASE_HEIGHT) / 2;
