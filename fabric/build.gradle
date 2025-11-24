@@ -1,7 +1,7 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
-    id 'org.jetbrains.kotlin.jvm' version "2.0.0"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id 'org.jetbrains.kotlin.jvm' version "2.2.20"
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.2.20'
 }
 
 architectury {
@@ -19,7 +19,7 @@ configurations {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-reflect:2.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:2.2.20"
 
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"

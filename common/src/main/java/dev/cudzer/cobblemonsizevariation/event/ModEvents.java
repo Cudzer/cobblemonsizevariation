@@ -3,8 +3,10 @@ package dev.cudzer.cobblemonsizevariation.event;
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
+import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent;
 import com.cobblemon.mod.common.api.events.pokemon.FossilRevivedEvent;
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent;
+import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent;
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
@@ -25,13 +27,19 @@ public class ModEvents {
 
     public static void registerEvents(){
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, ModEvents::onCobblemonSpawn);
+        CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_POST.subscribe(Priority.NORMAL, ModEvents::onSnackSpawn);
         CobblemonEvents.SHOULDER_MOUNT.subscribe(Priority.NORMAL, ModEvents::onShoulderMount);
         CobblemonEvents.STARTER_CHOSEN.subscribe(Priority.NORMAL, ModEvents::onStarterChosen);
         CobblemonEvents.FOSSIL_REVIVED.subscribe(Priority.NORMAL, ModEvents::onFossilRevived);
+        CobblemonEvents.RIDE_EVENT_PRE.subscribe(Priority.NORMAL, ModEvents::onAttemptRide);
     }
 
     private static Unit onCobblemonSpawn(SpawnEvent<PokemonEntity> event){
         return resizer(event.getEntity().getPokemon(), null, false);
+    }
+
+    private static Unit onSnackSpawn(PokeSnackSpawnPokemonEvent.Post event){
+        return resizer(event.getPokemonEntity().getPokemon(), null, false);
     }
 
     private static Unit onShoulderMount(ShoulderMountEvent event){
@@ -41,6 +49,27 @@ public class ModEvents {
             event.getPlayer().sendSystemMessage(tooHeavyMessage);
             event.cancel();
         }
+        return Unit.INSTANCE;
+    }
+
+    private static Unit onAttemptRide(RidePokemonEvent.Pre event){
+        Pokemon p = event.getPokemon().getPokemon();
+        MutableComponent message = Component.empty();
+        boolean ridable = true;
+        if(p.getScaleModifier() > ModConfig.preventRidingMaxSize){
+            message = Component.literal("This Cobblemon is too big to ride!");
+            ridable = false;
+        }
+        else if(p.getScaleModifier() < ModConfig.preventRidingMinSize){
+            message = Component.literal("This Cobblemon is too small to ride!");
+            ridable = false;
+        }
+
+        if(!ridable){
+            event.getPlayer().sendSystemMessage(message);
+            event.cancel();
+        }
+
         return Unit.INSTANCE;
     }
 

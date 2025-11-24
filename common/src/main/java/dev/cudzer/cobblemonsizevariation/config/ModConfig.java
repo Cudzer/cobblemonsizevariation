@@ -16,6 +16,8 @@ public class ModConfig {
     private static final String configFileLoc = CobblemonSizeVariation.MOD_ID + "/config.json";
 
     public static float preventShoulderMountSize;
+    public static float preventRidingMinSize;
+    public static float preventRidingMaxSize;
     public static float sizeModificationChance;
 
     public static String sizingAlgorithm;
@@ -56,6 +58,8 @@ public class ModConfig {
     private static void addDefaultFields(JsonObject defaultConfig){
         defaultConfig.addProperty(ConfigKey.SIZE_MODIFICATION_CHANCE, 0.5F);
         defaultConfig.addProperty(ConfigKey.PREVENT_SHOULDER_MOUNT_SIZE, 1.5F);
+        defaultConfig.addProperty(ConfigKey.PREVENT_RIDING_MIN_SIZE, 0.5F);
+        defaultConfig.addProperty(ConfigKey.PREVENT_RIDING_MAX_SIZE, 1.5F);
 
         defaultConfig.add(ConfigKey.PERMISSIONS, generateDefaultPermissions());
 
@@ -85,6 +89,8 @@ public class ModConfig {
     private static void loadConfig(JsonObject finalConfiguration){
         sizeModificationChance = finalConfiguration.get(ConfigKey.SIZE_MODIFICATION_CHANCE).getAsFloat();
         preventShoulderMountSize = finalConfiguration.get(ConfigKey.PREVENT_SHOULDER_MOUNT_SIZE).getAsFloat();
+        preventRidingMinSize = finalConfiguration.get(ConfigKey.PREVENT_RIDING_MIN_SIZE).getAsFloat();
+        preventRidingMaxSize = finalConfiguration.get(ConfigKey.PREVENT_RIDING_MAX_SIZE).getAsFloat();
         sizingAlgorithm = finalConfiguration.get(ConfigKey.SIZING_ALGORITHM).getAsString();
         biasSizeTowardAverage = finalConfiguration.get(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE).getAsBoolean();
         enableEssenceRecipes = finalConfiguration.get(ConfigKey.ENABLE_ESSENCE_RECIPES).getAsBoolean();

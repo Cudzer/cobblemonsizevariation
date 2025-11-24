@@ -4,6 +4,8 @@ public class ConfigKey {
 
     public static final String SIZE_MODIFICATION_CHANCE = "sizeModificationChance";
     public static final String PREVENT_SHOULDER_MOUNT_SIZE = "preventShoulderMountSize";
+    public static final String PREVENT_RIDING_MIN_SIZE = "preventRidingMinSize";
+    public static final String PREVENT_RIDING_MAX_SIZE = "preventRidingMaxSize";
     public static final String SIZING_ALGORITHM = "sizingAlgorithm";
     public static final String BIAS_SIZE_TOWARD_AVERAGE = "biasSizeTowardAverage";
 
