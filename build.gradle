@@ -1,13 +1,9 @@
 plugins {
     id "java"
-    id 'org.jetbrains.kotlin.jvm' version '2.2.20'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '2.2.20'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.2.0'
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'dev.architectury.loom' version '1.11-SNAPSHOT' apply false
-}
-
-base {
-    archivesName.set(rootProject.archives_name)
 }
 
 architectury {
@@ -21,6 +17,7 @@ allprojects {
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
+    archivesBaseName = rootProject.archives_name
     version = rootProject.mod_version
     group = rootProject.maven_group
 
