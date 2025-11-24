@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = CobblemonSizeVariation.MOD_ID)
+@EventBusSubscriber(modid = CobblemonSizeVariation.MOD_ID)
 public class ModNeoForgeNetworkManager implements NetworkManager {
     private static final String PROTOCOL_VERSION = "1.0";
 

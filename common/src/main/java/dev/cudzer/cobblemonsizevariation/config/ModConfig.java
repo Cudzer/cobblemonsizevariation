@@ -58,8 +58,8 @@ public class ModConfig {
     private static void addDefaultFields(JsonObject defaultConfig){
         defaultConfig.addProperty(ConfigKey.SIZE_MODIFICATION_CHANCE, 0.5F);
         defaultConfig.addProperty(ConfigKey.PREVENT_SHOULDER_MOUNT_SIZE, 1.5F);
-        defaultConfig.addProperty(ConfigKey.PREVENT_RIDING_MIN_SIZE, 0.5F);
-        defaultConfig.addProperty(ConfigKey.PREVENT_RIDING_MAX_SIZE, 1.5F);
+        defaultConfig.addProperty(ConfigKey.PREVENT_RIDING_MIN_SIZE, 0.3F);
+        defaultConfig.addProperty(ConfigKey.PREVENT_RIDING_MAX_SIZE, 1.8F);
 
         defaultConfig.add(ConfigKey.PERMISSIONS, generateDefaultPermissions());
 

@@ -14,7 +14,6 @@ import dev.cudzer.cobblemonsizevariation.CobblemonSizeVariation;
 import dev.cudzer.cobblemonsizevariation.config.ModConfig;
 import dev.cudzer.cobblemonsizevariation.data.CustomSizeDataManager;
 import dev.cudzer.cobblemonsizevariation.network.SizeChangedPacket;
-import kotlin.Unit;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,25 +33,24 @@ public class ModEvents {
         CobblemonEvents.RIDE_EVENT_PRE.subscribe(Priority.NORMAL, ModEvents::onAttemptRide);
     }
 
-    private static Unit onCobblemonSpawn(SpawnEvent<PokemonEntity> event){
-        return resizer(event.getEntity().getPokemon(), null, false);
+    private static void onCobblemonSpawn(SpawnEvent<PokemonEntity> event){
+        resizer(event.getEntity().getPokemon(), null, false);
     }
 
-    private static Unit onSnackSpawn(PokeSnackSpawnPokemonEvent.Post event){
-        return resizer(event.getPokemonEntity().getPokemon(), null, false);
+    private static void onSnackSpawn(PokeSnackSpawnPokemonEvent.Post event){
+        resizer(event.getPokemonEntity().getPokemon(), null, false);
     }
 
-    private static Unit onShoulderMount(ShoulderMountEvent event){
+    private static void onShoulderMount(ShoulderMountEvent event){
         Pokemon p = event.getPokemon();
         if(p.getScaleModifier() > ModConfig.preventShoulderMountSize){
             MutableComponent tooHeavyMessage = Component.literal("This Cobblemon is too chonky to sit on your shoulder!");
             event.getPlayer().sendSystemMessage(tooHeavyMessage);
             event.cancel();
         }
-        return Unit.INSTANCE;
     }
 
-    private static Unit onAttemptRide(RidePokemonEvent.Pre event){
+    private static void onAttemptRide(RidePokemonEvent.Pre event){
         Pokemon p = event.getPokemon().getPokemon();
         MutableComponent message = Component.empty();
         boolean ridable = true;
@@ -69,23 +67,21 @@ public class ModEvents {
             event.getPlayer().sendSystemMessage(message);
             event.cancel();
         }
-
-        return Unit.INSTANCE;
     }
 
-    private static Unit onStarterChosen(StarterChosenEvent event){
-        return resizer(event.getPokemon(), event.getPlayer(), false);
+    private static void onStarterChosen(StarterChosenEvent event){
+        resizer(event.getPokemon(), event.getPlayer(), false);
     }
 
-    private static Unit onFossilRevived(FossilRevivedEvent event){
-        return resizer(event.getPokemon(), event.getPlayer(), true);
+    private static void onFossilRevived(FossilRevivedEvent event){
+        resizer(event.getPokemon(), event.getPlayer(), true);
     }
 
     private static boolean canModifySize(){
         return random.nextFloat() < ModConfig.sizeModificationChance;
     }
 
-    private static Unit resizer(Pokemon pokemon, ServerPlayer player, boolean requireClientUpdate){
+    private static void resizer(Pokemon pokemon, ServerPlayer player, boolean requireClientUpdate){
         if(canModifySize()){
             double sizeModifier;
             var customSize = CustomSizeDataManager.getCustomSizeFile(pokemon.getSpecies());
@@ -102,6 +98,5 @@ public class ModEvents {
                 CobblemonSizeVariation.platform.getNetworkManager().sendPacketToPlayer(Objects.requireNonNull(player), new SizeChangedPacket(() -> pokemon, sizeModifier));
             }
         }
-        return Unit.INSTANCE;
     }
 }
