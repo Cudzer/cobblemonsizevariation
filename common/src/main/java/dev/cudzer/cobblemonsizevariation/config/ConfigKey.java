@@ -8,6 +8,7 @@ public class ConfigKey {
     public static final String PREVENT_RIDING_MAX_SIZE = "preventRidingMaxSize";
     public static final String SIZING_ALGORITHM = "sizingAlgorithm";
     public static final String BIAS_SIZE_TOWARD_AVERAGE = "biasSizeTowardAverage";
+    public static final String DISABLE_RESIZING_IN_PVP = "disableResizingInPvP";
 
     //SIZE DEFINITION KEYS
     public static final String SIZE_DEFINITION_NAME = "name";
