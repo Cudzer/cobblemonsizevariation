@@ -24,6 +24,7 @@ public class ModConfig {
 
     public static boolean biasSizeTowardAverage;
     public static boolean enableEssenceRecipes;
+    public static boolean disableResizingInPvP;
 
     public static HashMap<String, Integer> perms = new HashMap<>();
 
@@ -66,6 +67,7 @@ public class ModConfig {
         defaultConfig.addProperty(ConfigKey.SIZING_ALGORITHM, "basic");
         defaultConfig.addProperty(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE, false);
         defaultConfig.addProperty(ConfigKey.ENABLE_ESSENCE_RECIPES, false);
+        defaultConfig.addProperty(ConfigKey.DISABLE_RESIZING_IN_PVP, true);
     }
 
     private static void rewriteConfig(Gson gson, JsonObject defaultConfig, JsonObject finalConfig){
@@ -94,6 +96,7 @@ public class ModConfig {
         sizingAlgorithm = finalConfiguration.get(ConfigKey.SIZING_ALGORITHM).getAsString();
         biasSizeTowardAverage = finalConfiguration.get(ConfigKey.BIAS_SIZE_TOWARD_AVERAGE).getAsBoolean();
         enableEssenceRecipes = finalConfiguration.get(ConfigKey.ENABLE_ESSENCE_RECIPES).getAsBoolean();
+        disableResizingInPvP = finalConfiguration.get(ConfigKey.DISABLE_RESIZING_IN_PVP).getAsBoolean();
         JsonArray permissionConfig = finalConfiguration.get(ConfigKey.PERMISSIONS).getAsJsonArray();
 
         perms.clear();
