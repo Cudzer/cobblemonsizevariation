@@ -3,10 +3,6 @@
   "package": "dev.cudzer.cobblemonsizevariation.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
-  "client": [
-    "client.PCGuiMixin",
-    "client.SummaryMixin"
-  ],
   "mixins": [
     "RecipeBlockerMixin"
   ],

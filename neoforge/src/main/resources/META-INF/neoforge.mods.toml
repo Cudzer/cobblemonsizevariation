@@ -9,7 +9,7 @@ version = "${version}"
 displayName = "CobblemonSizeVariation"
 authors = "Cudzer"
 description = '''
-A mod that makes cobblemon spawn in different sizes
+Adds essence items that let players resize their own Cobblemon, within the size range Cobblemon itself defines
 '''
 #logoFile = ""
 
@@ -36,3 +36,10 @@ side = "BOTH"
 
 [[mixins]]
 config = "cobblemonsizevariation.mixins.json"
+
+[[dependencies.cobblemonsizevariation]]
+modId = "cobblemon"
+type = "required"
+versionRange = "[1.8.0,)"
+ordering = "AFTER"
+side = "BOTH"
