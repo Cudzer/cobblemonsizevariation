@@ -1,25 +1,16 @@
 package dev.cudzer.cobblemonsizevariation.config;
 
 public class ConfigKey {
-
-    public static final String SIZE_MODIFICATION_CHANCE = "sizeModificationChance";
+    // Cobblemon owns the rolling, the range and the brackets, so the options that
+    // used to describe them are gone: sizeModificationChance, sizingAlgorithm,
+    // biasSizeTowardAverage and the size definition keys. What is left are the
+    // two limits Cobblemon has no equivalent for, plus the recipe switch.
+    //
+    // preventRidingMinSize is gone too, on purpose: Cobblemon enforces a minimum
+    // of its own through minimumRidingScale, and two guards on the same rule only
+    // make it harder to work out which one refused.
     public static final String PREVENT_SHOULDER_MOUNT_SIZE = "preventShoulderMountSize";
-    public static final String PREVENT_RIDING_MIN_SIZE = "preventRidingMinSize";
     public static final String PREVENT_RIDING_MAX_SIZE = "preventRidingMaxSize";
-    public static final String SIZING_ALGORITHM = "sizingAlgorithm";
-    public static final String BIAS_SIZE_TOWARD_AVERAGE = "biasSizeTowardAverage";
-
-    //SIZE DEFINITION KEYS
-    public static final String SIZE_DEFINITION_NAME = "name";
-    public static final String SIZE_DEFINITION_MIN = "min";
-    public static final String SIZE_DEFINITION_MAX = "max";
-    public static final String SIZE_DEFINITION_COLOR = "color";
-
     //ITEM RECIPES
     public static final String ENABLE_ESSENCE_RECIPES = "enableEssenceRecipes";
-
-    //PERMISSION KEYS
-    public static final String PERMISSIONS = "permissions";
-    public static final String POKESIZER_PERM_NAME = "cobblemonsizevariation.command.pokesizer";
-    public static final String POKESIZER_SELF_PERM_NAME = "cobblemonsizevariation.command.pokesizer.self";
 }

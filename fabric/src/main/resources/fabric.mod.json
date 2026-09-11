@@ -3,7 +3,7 @@
   "id": "cobblemonsizevariation",
   "version": "${version}",
   "name": "CobblemonSizeVariation",
-  "description": "A mod that makes cobblemon spawn in different sizes",
+  "description": "Adds essence items that let players resize their own Cobblemon, within the size range Cobblemon itself defines",
   "authors": [
     "Cudzer"
   ],
@@ -16,9 +16,6 @@
   "entrypoints": {
     "main": [
       "dev.cudzer.cobblemonsizevariation.fabric.CobblemonSizeVariationFabric"
-    ],
-    "client": [
-      "dev.cudzer.cobblemonsizevariation.fabric.client.CobblemonSizeVariationFabricClient"
     ]
   },
   "mixins": [
@@ -29,7 +26,8 @@
     "minecraft": "~1.21.1",
     "java": ">=21",
     "architectury": ">=13.0.8",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "cobblemon": ">=1.8.0"
   },
   "suggests": {
     "another-mod": "*"

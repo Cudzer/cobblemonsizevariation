@@ -1,9 +1,13 @@
 {
   "itemGroup.cobblemonsizevariation": "Cobblemon Size Variations",
-
   "item.cobblemonsizevariation.tiny_essence": "Tiny Essence",
   "item.cobblemonsizevariation.normal_essence": "Normal Essence",
   "item.cobblemonsizevariation.huge_essence": "Huge Essence",
   "item.cobblemonsizevariation.shrink_essence": "Shrink Essence",
-  "item.cobblemonsizevariation.growth_essence": "Growth Essence"
+  "item.cobblemonsizevariation.growth_essence": "Growth Essence",
+  "message.cobblemonsizevariation.size_changed": "%1$s is now size %2$s",
+  "message.cobblemonsizevariation.at_maximum": "%1$s is at maximum size!",
+  "message.cobblemonsizevariation.at_minimum": "%1$s is at minimum size!",
+  "message.cobblemonsizevariation.too_chonky": "This Cobblemon is too chonky to sit on your shoulder!",
+  "message.cobblemonsizevariation.too_big_to_ride": "This Cobblemon is too big to ride!"
 }
